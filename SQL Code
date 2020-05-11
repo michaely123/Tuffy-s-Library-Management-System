@@ -1,0 +1,95 @@
+/* Database name is Tuffy's Library Management System */
+USE "Tuffy's Library Management System";
+
+CREATE TABLE Customer (
+id              integer 		    NOT NULL PRIMARY KEY, 
+name            varchar(25) 	  NULL, 
+address         varchar(50) 	  NULL, 
+city            varchar(25) 	  NULL, 
+zip             integer 		    NULL, 
+state           varchar(2) 		  NULL,
+email           varchar(80) 	  NULL, 
+phone           varchar(14) 	  NULL
+);
+
+CREATE TABLE "User" (
+id 				      integer 		    NOT NULL PRIMARY KEY, 
+username 		    varchar(150)    NOT NULL UNIQUE, 
+password 		    varchar(128) 	  NOT NULL, 
+first_name 		  varchar(30) 	  NOT NULL, 
+last_name		    varchar(150) 	  NOT NULL,
+email 			    varchar(254) 	  NOT NULL, 
+last_login		  datetime 		    NULL, 
+date_joined 	  date            NOT NULL, 
+is_superuser  	BIT 			      NOT NULL, 
+is_staff 		    BIT 		      	NOT NULL, 
+is_active 	  	BIT 		      	NOT NULL, 
+);
+
+CREATE TABLE Product (
+id 			        integer 		    NOT NULL PRIMARY KEY, 
+author 	      	varchar(25) 	  NULL, 
+isbn 		        numeric(13) 		NULL, 
+publisher     	varchar(25) 	  NULL, 
+quantity		    integer 		    NULL, 
+book_title 	    varchar(255) 	  NULL, 
+date_received   datetime 		    NULL
+);
+
+CREATE TABLE IssueOrder (
+id 			        integer 		    NOT NULL PRIMARY KEY, 
+date_out 		    datetime 		    NOT NULL, 
+status 		      varchar(255) 	  NULL, 
+customer_id 	  integer 		    NULL FOREIGN KEY REFERENCES Customer(id), 
+product_id 	    integer 		    NULL FOREIGN KEY REFERENCES Product(id),
+user_id		      integer 		    NULL FOREIGN KEY REFERENCES "User"(id)
+);
+
+
+CREATE TABLE ReturnOrder (
+id 			        integer 		    NOT NULL PRIMARY KEY, 
+date_in 		    datetime 		    NOT NULL, 
+status 		      varchar(255) 	  NULL, 
+customer_id 	  integer 		    NULL FOREIGN KEY REFERENCES Customer(id), 
+product_id 	    integer 		    NULL FOREIGN KEY REFERENCES Product(id),
+user_id 		    integer 		    NULL FOREIGN KEY REFERENCES "User"(id)
+);
+
+
+SELECT * FROM Customer;
+SELECT * FROM "User";
+SELECT * FROM Product;
+SELECT * FROM IssueOrder;
+SELECT * FROM ReturnOrder;
+
+
+INSERT INTO Customer (id, name, address, city, zip, state, email, phone) VALUES 
+('1', 'Juan Villegas', '123 E Tuffy Dr', 'Fullerton', '92777', 'OR', 'juan@csu.fullerton.edu', '(714) 777-7777'),
+('2', 'Tuffy Titan', '123 E Tuffy Dr', 'Anaheim', '92777', 'CA', 'tuffy@gmail.com', '(714) 777-8788' ),
+('3', 'John Smith', '123 E Tuffy Dr', 'Fullerton', '92777', 'CA', 'johnsmith@gmail.com', '(714) 888-8888');
+
+INSERT INTO "User" (id, username, password, first_name, last_name, email, last_login, date_joined, is_superuser, is_staff, is_active)
+VALUES ('1', 'admin', 'pbkdf2_sha256$180000$LAw1qw2uzeLM$NC+8BvX4G0yx5Ojy8gEmDoMKzYWUrEuI+CEiFiuPCME=', 'Juan', 'Villegas', 'juanvillegas@fullertonlibrary.com', '2020-04-30 08:45:10', '2020-04-20', 1, 1, 1); /*1 is true, 0 is false)*/
+
+INSERT INTO Product (id, author, isbn, publisher, quantity, book_title, date_received) VALUES 
+('1', 'J. K. Rowling', '9823235697534', 'Bloomsbury', '1', 'Harry Potter and the Sorcerer’s Stone', '2020-04-12 04:20:00'),
+('2', 'Gary Paulsen', '1234455647851', 'Penguin Random House LLC', '1', 'Brian’s Hunt', '2020-04-12 08:15:00'),
+('3', 'Louis Sachar', '3433556985314', 'Farrar, Straus and Girou', '1', 'Holes', '2020-04-12 08:17:00'),
+('4', 'Stephenie Meyer', '2343556578932', 'Little, Brown and Company', '1', 'Twilight', '2020-04-12 08:59:00'),
+('5', 'Dav Pilkey', '1232426324156', 'Juvenile Fiction', '1', 'The Adventures of Captain Underpants', '2020-04-12 013:07:00'),
+('6', 'Dav Pilkey', '6767769325478', 'Juvenile', '1', 'Captain Underpants and the Attack of the Talking Toilets', '2020-04-12 15:15:00'),
+('7', 'CSUF', '9038240635864', 'CSUF', '4', 'Tuffy', '2020-04-12 19:09:00');
+
+INSERT INTO IssueOrder (id, date_out, status, customer_id, product_id, user_id) 
+VALUES ('1', '2020-04-19 07:50:29', 'Checked In', '1', '1', '1'),
+('2', '2020-04-19 08:03:54', 'Checked In', '1', '1', '1'),
+('3', '2020-04-19 08:04:11', 'Checked In', '1', '1', '1'),
+('4', '2020-04-19 08:39:28', 'Checked In', '1', '1', '1'),
+('5', '2020-04-19 08:39:44', 'Checked In', '1', '1', '1'),
+('6', '2020-04-19 08:39:57', 'Checked In', '1', '1', '1');
+
+INSERT INTO ReturnOrder (id, date_in, status, customer_id, product_id, user_id) VALUES
+('1', '2020-04-19 07:50:44', 'Checked Out', '1', '1', '1'),
+('2', '2020-04-19 08:04:01', 'Checked Out', '2', '1', '1'),
+('3', '2020-04-19 08:47:27', 'Checked Out', '1', '1', '1'),
+('4', '2020-04-19 08:59:31', 'Checked Out', '2', '1', '1');
