@@ -1,6 +1,14 @@
 /* Database name is Tuffy's Library Management System */
 USE "Tuffy's Library Management System";
 
+
+SELECT * FROM Customer;
+SELECT * FROM "User";
+SELECT * FROM Product;
+SELECT * FROM IssueOrder;
+SELECT * FROM ReturnOrder;
+
+
 CREATE TABLE Customer (
 id              integer 		    NOT NULL PRIMARY KEY, 
 name            varchar(25) 	  NULL, 
@@ -56,11 +64,6 @@ user_id 		    integer 		    NULL FOREIGN KEY REFERENCES "User"(id)
 );
 
 
-SELECT * FROM Customer;
-SELECT * FROM "User";
-SELECT * FROM Product;
-SELECT * FROM IssueOrder;
-SELECT * FROM ReturnOrder;
 
 
 INSERT INTO Customer (id, name, address, city, zip, state, email, phone) VALUES 
